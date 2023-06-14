@@ -1,12 +1,13 @@
 {
-  "name": "curso-fullstack",
+  "name": "curso-fullstack-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "standard .",
+    "lint:fix": "standard --fix"
   },
   "dependencies": {
     "autoprefixer": "10.4.14",
@@ -17,5 +18,11 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.2"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json"
   }
 }
