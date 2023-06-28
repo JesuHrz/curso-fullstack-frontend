@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import classNames from 'classnames'
 import DefaultCalendar from 'react-calendar'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'

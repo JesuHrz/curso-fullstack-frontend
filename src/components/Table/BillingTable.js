@@ -25,7 +25,7 @@ export function BillingTable ({ data, actions }) {
   const [dateFilter, setDateFilter] = useState(new Date())
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [selectedBilling, setSelectedBilling] = useState(null)
-  const columnHelper= useMemo(() => createColumnHelper(data), [data])
+  const columnHelper = useMemo(() => createColumnHelper(data), [data])
 
   const onSubmit = useCallback((value, actions) => {
     if (value.id) {
@@ -45,7 +45,7 @@ export function BillingTable ({ data, actions }) {
   const formik = useFormik({
     initialValues,
     validationSchema: billingValidation,
-    onSubmit,
+    onSubmit
   })
 
   const handleOpenModal = useCallback(() => {
@@ -93,7 +93,7 @@ export function BillingTable ({ data, actions }) {
             </div>
           )
         }
-      }),
+      })
     ]
 
     if (Array.isArray(actions)) {
@@ -124,8 +124,8 @@ export function BillingTable ({ data, actions }) {
               }
             </div>
           )
-        },
-      }),)
+        }
+      }))
     }
 
     return _columns
@@ -144,7 +144,7 @@ export function BillingTable ({ data, actions }) {
         />
         <Calendar
           value={dateFilter}
-          onChange={(month) =>  setDateFilter(month)}
+          onChange={(month) => setDateFilter(month)}
         />
       </div>
       <Table data={data} columns={columns} />
@@ -153,7 +153,7 @@ export function BillingTable ({ data, actions }) {
         closeModal={handleCloseModal}
       >
         <div className='w-[400px]'>
-          <h2 className='text-2xl font-semibold'>{ selectedBilling ? 'Editar' : 'Crear' } Factura</h2>
+          <h2 className='text-2xl font-semibold'>{selectedBilling ? 'Editar' : 'Crear'} Factura</h2>
           <X
             className='cursor-pointer absolute top-2 right-2'
             onClick={handleCloseModal}

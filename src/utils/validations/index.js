@@ -18,5 +18,5 @@ export const billingValidation = object({
   name: string().required('El nombre del servicio es requerido.'),
   description: string().optional(),
   dateOfPaid: string().required('La fecha de pago es requerido.'),
-  price: number().positive().integer().required('El valor de la factura es requerido.'),
+  price: number().positive().integer().required('El valor de la factura es requerido.')
 })

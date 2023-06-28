@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  redirects() {
+  redirects () {
     return [
       {
         source: '/',
         destination: '/dashboard',
-        permanent: true,
-      },
+        permanent: true
+      }
     ]
   }
 }

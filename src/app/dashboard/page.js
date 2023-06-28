@@ -1,5 +1,5 @@
 import { Actions } from '@/components/Table'
-import { BillingTable } from "@/components/Table/BillingTable"
+import { BillingTable } from '@/components/Table/BillingTable'
 
 export const metadata = {
   title: 'Dashboard | Curso FullStack - UNICOLOMBO',
@@ -28,7 +28,7 @@ export default function Dashboard () {
     <main className='flex flex-1 flex-col p-20'>
       <h2 className='text-4xl font-semibold'>Facturas</h2>
       <p className='text-lg'>Administra tus facturas mes a mes</p>
-      <div className="max-w-[900px] w-full mt-5">
+      <div className='max-w-[900px] w-full mt-5'>
         <BillingTable
           data={fake}
           actions={[Actions.EDIT, Actions.REMOVE]}

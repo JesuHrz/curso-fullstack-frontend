@@ -4,7 +4,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable
- } from '@tanstack/react-table'
+} from '@tanstack/react-table'
 import classNames from 'classnames'
 
 export function Table ({ data, columns }) {
@@ -28,8 +28,8 @@ export function Table ({ data, columns }) {
                   >
                     {
                       header.isPlaceholder
-                      ? null
-                      : flexRender(
+                        ? null
+                        : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )
@@ -65,8 +65,8 @@ export function Table ({ data, columns }) {
                   <th key={header.id} className='p-1'>
                     {
                       header.isPlaceholder
-                      ? null
-                      : flexRender(
+                        ? null
+                        : flexRender(
                           header.column.columnDef.footer,
                           header.getContext()
                         )
