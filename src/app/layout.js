@@ -1,4 +1,5 @@
 import './globals.css'
+import 'react-calendar/dist/Calendar.css'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })

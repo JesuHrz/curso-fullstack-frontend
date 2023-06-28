@@ -1,4 +1,4 @@
-import { object, string } from 'yup'
+import { object, string, number } from 'yup'
 
 export const emailAndPasswordValidation = object({
   email: string()
@@ -11,5 +11,12 @@ export const emailAndPasswordValidation = object({
 
 export const SignUpValidation = emailAndPasswordValidation.shape({
   name: string()
-    .required('El nombre es requerido.'),
+    .required('El nombre es requerido.')
+})
+
+export const billingValidation = object({
+  name: string().required('El nombre del servicio es requerido.'),
+  description: string().optional(),
+  dateOfPaid: string().required('La fecha de pago es requerido.'),
+  price: number().positive().integer().required('El valor de la factura es requerido.'),
 })

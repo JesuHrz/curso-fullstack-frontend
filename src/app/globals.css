@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply text-blue-950;
+  @apply font-medium;
+  @apply bg-slate-100;
+}
+
 .container {
   @apply max-w-7xl;
   @apply px-5;
@@ -41,30 +69,42 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   @apply outline-blue-200;
 }
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+table {
+  @apply border-spacing-0;
+  @apply border-separate;
+  @apply border-slate-300;
+  @apply border-solid;
+  @apply rounded-lg;
+  @apply border-2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+thead {
+  @apply bg-slate-200;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+td {
+  @apply border-t-2;
 }
 
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  @apply text-blue-950;
-  @apply font-medium;
-  @apply bg-slate-100;
+th {
+  @apply border-t-0;
+}
+
+td, th {
+  @apply border-slate-300;
+  @apply border-solid;
+  @apply border-l-2;
+}
+
+td:first-child, th:first-child {
+  @apply border-l-0;
+}
+
+tfoot th {
+  @apply border-t-2;
+}
+
+
+.react-calendar__tile {
+  @apply capitalize;
 }
