@@ -29,6 +29,7 @@
     "yup": "1.2.0"
   },
   "devDependencies": {
+    "husky": "^8.0.3",
     "standard": "17.1.0"
   },
   "eslintConfig": {
