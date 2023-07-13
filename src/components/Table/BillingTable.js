@@ -11,8 +11,11 @@ import { InputText } from '@/components/InputText'
 import { Table, Actions } from '@/components/Table'
 import { Calendar } from '@/components/Calendar'
 
+import axios from '@/utils/axios'
 import { currencyFormat } from '@/utils/currency'
 import { billingValidation } from '@/utils/validations'
+
+import { useBillingsStore } from '@/hooks/useBillingsStore'
 
 const initialValues = {
   name: '',
@@ -26,21 +29,42 @@ export function BillingTable ({ data, actions }) {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [selectedBilling, setSelectedBilling] = useState(null)
   const columnHelper = useMemo(() => createColumnHelper(data), [data])
+  // eslint-disable-next-line
+  const [_, setBillings] = useBillingsStore()
+  const handleCloseModal = useCallback(() => setIsOpenModal(false), [])
 
-  const onSubmit = useCallback((value, actions) => {
-    if (value.id) {
-      console.log('UPDATE')
-      // TODO: Implement the logic for updating the billing data
-    } else {
-      console.log('CREATE')
-      // TODO: Implement the logic for creating a new billing data
+  const onSubmit = useCallback(async (values, actions) => {
+    try {
+      if (values.id) {
+        const response = await axios.put(`/billings/${values.id}`, values)
+        const { data } = response.data
+
+        setBillings((state) => {
+          const billingIndex = state.billings.findIndex((billing) => billing.id === values.id)
+          const billing = state.billings[billingIndex] || {}
+          state.billings[billingIndex] = { ...billing, ...data }
+
+          return {
+            billings: state.billings
+          }
+        })
+      } else {
+        const response = await axios.post('/billings', values)
+        const { data } = response.data
+
+        setBillings((state) => {
+          return {
+            billings: [...state.billings, data]
+          }
+        })
+      }
+    } catch (e) {
+      console.error('createBilling or updateBilling error', e)
+      actions.setSubmitting(false)
     }
 
-    // This simulates a hit to the API
-    setTimeout(() => {
-      actions.setSubmitting(false)
-    }, 3000)
-  }, [])
+    handleCloseModal()
+  }, [setBillings, handleCloseModal])
 
   const formik = useFormik({
     initialValues,
@@ -53,12 +77,28 @@ export function BillingTable ({ data, actions }) {
     formik.resetForm()
     setSelectedBilling(null)
   }, [formik])
-  const handleCloseModal = useCallback(() => setIsOpenModal(false), [])
+
   const handleEditBilling = useCallback((billing) => {
     setIsOpenModal(true)
     formik.setValues({ ...billing })
     setSelectedBilling(billing)
   }, [formik])
+
+  const handleRemoveBilling = useCallback(async (billing) => {
+    console.log('billing', billing)
+    try {
+      await axios.delete(`/billings/${billing.id}`)
+
+      setBillings((state) => {
+        const newBillings = state.billings.filter((_billing) => billing.id !== _billing.id)
+        return {
+          billings: newBillings
+        }
+      })
+    } catch (e) {
+      console.error('removeBilling error', e)
+    }
+  }, [setBillings])
 
   const columns = useMemo(() => {
     const _columns = [
@@ -116,7 +156,7 @@ export function BillingTable ({ data, actions }) {
                 actions.includes(Actions.REMOVE) && (
                   <Trash
                     className='cursor-pointer'
-                    onClick={() => console.log('REMOVE', info.row.original)}
+                    onClick={() => handleRemoveBilling(info.row.original)}
                     size={22}
                     color={colors.slate[400]}
                   />
@@ -129,7 +169,7 @@ export function BillingTable ({ data, actions }) {
     }
 
     return _columns
-  }, [columnHelper, data, actions, handleEditBilling])
+  }, [columnHelper, data, actions, handleEditBilling, handleRemoveBilling])
 
   const isDisabled = !formik.isValid || formik.isSubmitting || !formik.dirty
 

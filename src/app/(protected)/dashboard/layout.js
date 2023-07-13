@@ -8,14 +8,26 @@ import { House, User, Gear, SignOut } from '@phosphor-icons/react'
 import colors from 'tailwindcss/colors'
 
 import { NavLink } from '@/components/NavLink'
+import { AUTH_STORE_INITIAL_STATE } from '@/store/auth'
+import { useAuthStore } from '@/hooks/useAuthStore'
 
 if (typeof window !== 'undefined') {
   Modal.setAppElement(document.body)
 }
 
 export default function Layout ({ children }) {
+  const [authState, setAuthState] = useAuthStore((state) => {
+    return {
+      name: state?.user?.name || '',
+      email: state?.user?.email || ''
+    }
+  })
   const pathName = usePathname()
   const isActive = useCallback((link) => link === pathName, [pathName])
+
+  const handleLogout = useCallback(() => {
+    setAuthState(() => AUTH_STORE_INITIAL_STATE)
+  }, [setAuthState])
 
   return (
     <main className='flex h-screen bg-white overflow-hidden'>
@@ -29,8 +41,8 @@ export default function Layout ({ children }) {
             height={80}
           />
           <div className='block text-ellipsis whitespace-nowrap overflow-hidden text-white'>
-            <p className='font-semibold text-lg'>Jesus Hernandez</p>
-            <span className='text-base' title='jesus.hernandez@unicolombo.edu.co'>jesus.hernandez@unicolombo.edu.co</span>
+            <p className='font-semibold text-lg'>{authState.name}</p>
+            <span className='text-base' title={authState.email}>{authState.email}</span>
           </div>
         </div>
         <nav className='mt-8 h-full'>
@@ -69,6 +81,7 @@ export default function Layout ({ children }) {
                 <NavLink
                   as='button'
                   icon={<SignOut size={26} color={colors.white} />}
+                  onClick={handleLogout}
                 >
                   Cerrar session
                 </NavLink>

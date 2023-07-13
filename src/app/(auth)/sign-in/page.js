@@ -2,11 +2,16 @@
 
 import { useCallback } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useFormik } from 'formik'
 
 import { InputText } from '@/components/InputText'
 
+import axios from '@/utils/axios'
+// import * as alerts from '@/utils/alerts'
 import { emailAndPasswordValidation } from '@/utils/validations'
+import { decode } from '@/utils/jwt'
+import { useAuthStore } from '@/hooks/useAuthStore'
 
 const initialValues = {
   email: '',
@@ -14,14 +19,28 @@ const initialValues = {
 }
 
 export default function SignIn () {
-  const onSubmit = useCallback((value, actions) => {
-    console.log('value', value)
+  const router = useRouter()
+  // eslint-disable-next-line
+  const [_, setAuthState] = useAuthStore((state) => state.jwt)
+  const onSubmit = useCallback(async (values, actions) => {
+    try {
+      const response = await axios.post('/auth/sign-in', values)
+      const { data } = response.data
+      const user = decode(data.jwt)
 
-    // This simulates a hit to the API
-    setTimeout(() => {
+      setAuthState(() => {
+        return {
+          jwt: data.jwt,
+          user
+        }
+      })
+
+      router.replace('/dashboard')
+    } catch (e) {
+      // alerts.error(e.message)
       actions.setSubmitting(false)
-    }, 3000)
-  }, [])
+    }
+  }, [router, setAuthState])
 
   const formik = useFormik({
     initialValues,

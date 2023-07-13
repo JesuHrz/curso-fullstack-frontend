@@ -3,10 +3,15 @@
 import { useCallback } from 'react'
 import Link from 'next/link'
 import { useFormik } from 'formik'
+import { useRouter } from 'next/navigation'
 
 import { InputText } from '@/components/InputText'
 
+import axios from '@/utils/axios'
 import { SignUpValidation } from '@/utils/validations'
+import { decode } from '@/utils/jwt'
+
+import { useAuthStore } from '@/hooks/useAuthStore'
 
 const initialValues = {
   name: '',
@@ -15,14 +20,28 @@ const initialValues = {
 }
 
 export default function SignUp () {
-  const onSubmit = useCallback((value, actions) => {
-    console.log('value', value)
+  const router = useRouter()
+  // eslint-disable-next-line
+  const [_, setAuthState] = useAuthStore((state) => state.jwt)
+  const onSubmit = useCallback(async (values, actions) => {
+    try {
+      const response = await axios.post('/auth/sign-up', values)
+      const { data } = response.data
+      const user = decode(data.jwt)
 
-    // This simulates a hit to the API
-    setTimeout(() => {
+      setAuthState(() => {
+        return {
+          jwt: data.jwt,
+          user
+        }
+      })
+
+      router.replace('/dashboard')
+    } catch (e) {
+      console.error('SignUp error:', e)
       actions.setSubmitting(false)
-    }, 3000)
-  }, [])
+    }
+  }, [setAuthState, router])
 
   const formik = useFormik({
     initialValues,
